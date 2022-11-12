@@ -6,4 +6,4 @@ log.info('loaded foo.util')
 
 
 def do_stuff():
-    log.warning('doing stuff!')
+    log.critical('doing stuff!')

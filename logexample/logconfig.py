@@ -11,33 +11,57 @@ except ImportError:
     )
 
 
+class ContextFilter(logging.Filter):
+    def filter(self, record: logging.LogRecord) -> bool:
+        if record.name.startswith("logexample"):
+            if record.name.startswith("logexample.data"):
+                record.packagename = "[Ray Data]"
+            elif record.name.startswith("logexample.tune"):
+                record.packagename = "[Ray Tune]"
+            elif record.name.startswith("logexample.train"):
+                record.packagename = "[Ray Train]"
+            else:
+                record.packagename = "[Ray Core]"
+        else:
+            record.package.name = ""
+
+        return True
+
+
 def set_log_config():
     formatters = {
         "console": {
-            "datefmt": "[%Y-%m-%d %H:%M:%S]",
+            "format": "\[[bold green]%(asctime)s[/bold green]][bold blue]%(packagename)s[/bold blue] %(message)s",
+            "datefmt": "%Y-%m-%d %H:%M:%S",
         }
     }
-
-    filters = {}
+    filters = {
+        "contextfilter": {
+            "()": ContextFilter
+        }
+    }
 
     if rich is not None:
         handlers = {
             "console": {
                 "class": "rich.logging.RichHandler",
-                "log_time_format": "[%Y-%m-%d %H:%M:%S]",
+                # "log_time_format": "[%Y-%m-%d %H:%M:%S]",
                 "markup": True,
                 "show_path": True,
+                "show_level": True,
+                "show_time": False,
+                "filters": ["contextfilter"],
+                "formatter": "console",
             }
         }
     else:
         handlers = {
             "console": {
-                "level": "INFO",
-                "class": "logging.StreamHandler"
+                "class": "logging.StreamHandler",
+                "filters": ["contextfilter"],
+                "formatter": "console",
             }
         }
-
-    filters =
 
     loggers = {
         "": {  # root logger
