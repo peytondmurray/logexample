@@ -34,7 +34,7 @@ class ContextFilter(logging.Filter):
             else:
                 record.packagename = "[Ray Core]"
         else:
-            record.package.name = ""
+            record.packagename = ""
 
         return True
 
