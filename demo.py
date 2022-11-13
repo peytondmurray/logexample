@@ -19,9 +19,9 @@ def run_set_config():
 
 def run_conditional_config():
     clear_logging_config()
-    logging.basicConfig(format="%(asctime)s: %(message)s: This is a basic config!")
+    logging.basicConfig(format="%(asctime)s: %(message)s")
 
-    # Check if a logging configuration has been provided by the user. If not, then create one. Try
+    # Check if a logging configuration has been provided by the user. If not, then create one.
     if not logging.getLogger().hasHandlers():
         logexample.logconfig.set_log_config()
 

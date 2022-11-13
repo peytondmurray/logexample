@@ -13,6 +13,17 @@ except ImportError:
 
 class ContextFilter(logging.Filter):
     def filter(self, record: logging.LogRecord) -> bool:
+        """Append a package name to the log record depending on where the log statement is emitted
+        from.
+
+        record : logging.LogRecord
+            Log record upon which the filter acts.
+
+        Returns
+        -------
+        bool
+            If True, the log is kept; False hides the record.
+        """
         if record.name.startswith("logexample"):
             if record.name.startswith("logexample.data"):
                 record.packagename = "[Ray Data]"
@@ -38,18 +49,17 @@ def set_log_config():
     if rich is not None:
         formatters = {
             "console": {
-                "format": "\[[bold green]%(asctime)s[/bold green]][bold blue]%(packagename)s[/bold blue] %(message)s",
-                "datefmt": "%Y-%m-%d %H:%M:%S",
+                "format": "[bold blue]%(packagename)s[/bold blue] %(message)s",
             }
         }
         handlers = {
             "console": {
                 "class": "rich.logging.RichHandler",
-                # "log_time_format": "[%Y-%m-%d %H:%M:%S]",
+                "log_time_format": "%Y-%m-%d %H:%M:%S",
                 "markup": True,
                 "show_path": True,
                 "show_level": True,
-                "show_time": False,
+                "show_time": True,
                 "filters": ["contextfilter"],
                 "formatter": "console",
             }
