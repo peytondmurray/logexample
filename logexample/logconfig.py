@@ -29,12 +29,6 @@ class ContextFilter(logging.Filter):
 
 
 def set_log_config():
-    formatters = {
-        "console": {
-            "format": "\[[bold green]%(asctime)s[/bold green]][bold blue]%(packagename)s[/bold blue] %(message)s",
-            "datefmt": "%Y-%m-%d %H:%M:%S",
-        }
-    }
     filters = {
         "contextfilter": {
             "()": ContextFilter
@@ -42,6 +36,12 @@ def set_log_config():
     }
 
     if rich is not None:
+        formatters = {
+            "console": {
+                "format": "\[[bold green]%(asctime)s[/bold green]][bold blue]%(packagename)s[/bold blue] %(message)s",
+                "datefmt": "%Y-%m-%d %H:%M:%S",
+            }
+        }
         handlers = {
             "console": {
                 "class": "rich.logging.RichHandler",
@@ -55,6 +55,12 @@ def set_log_config():
             }
         }
     else:
+        formatters = {
+            "console": {
+                "format": "[%(asctime)s]%(packagename)s %(message)s",
+                "datefmt": "%Y-%m-%d %H:%M:%S",
+            }
+        }
         handlers = {
             "console": {
                 "class": "logging.StreamHandler",
